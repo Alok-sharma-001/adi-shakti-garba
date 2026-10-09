@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0b0604">
+<title>Gate Scanner · Adi Shakti Garba</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Great+Vibes&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0604;--card:#1a0d08;--line:rgba(232,186,96,.25);--gold:#e8ba60;--gold2:#ffe3a3;--text:#f6e9d4;--muted:#bfa98a;
+  --ok:#1fa463;--warn:#e08a00;--bad:#c62828;--gold-grad:linear-gradient(180deg,#fff3c9,#f2c96b 45%,#b9853a)}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--text);font-family:Poppins,system-ui,sans-serif;min-height:100svh;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:560px;margin:auto;padding:16px}
+.gold{background:var(--gold-grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 0 14px;border-bottom:1px solid var(--line)}
+.brand{font-family:Cinzel,serif;font-weight:900;font-size:1.05rem;line-height:1}
+.brand small{display:block;font-family:"Great Vibes";font-weight:400;font-size:1.2rem;color:var(--gold)}
+.pill{font-size:.75rem;border:1px solid var(--line);border-radius:999px;padding:6px 12px;color:var(--gold2);background:var(--card);cursor:pointer;font-family:inherit}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:14px;padding:15px 20px;font:600 1rem Poppins;cursor:pointer;width:100%}
+.btn-gold{background:var(--gold-grad);color:#2a1504}
+.btn-ghost{background:transparent;border:1.5px solid var(--gold);color:var(--gold2)}
+.btn:disabled{opacity:.5}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;margin-top:16px}
+label{font-size:.8rem;color:var(--muted);display:block;margin:14px 0 6px}
+input,select{width:100%;background:#0f0805;border:1px solid rgba(232,186,96,.35);color:var(--text);border-radius:12px;padding:14px;font:500 1rem Poppins;outline:none}
+input:focus,select:focus{border-color:var(--gold)}
+.err{color:#ff8a80;font-size:.85rem;margin-top:10px;min-height:1.2em}
+h1{font-family:Cinzel,serif;font-size:1.4rem;text-align:center}
+.sub{text-align:center;color:var(--muted);font-size:.85rem;margin-top:4px}
+
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 8px;text-align:center}
+.stat b{display:block;font-family:Cinzel,serif;font-size:1.4rem}
+.stat small{font-size:.66rem;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.bar{height:6px;border-radius:6px;background:#2a1a10;margin-top:10px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--gold-grad);transition:width .5s}
+
+#reader{margin-top:14px;border-radius:18px;overflow:hidden;border:2px solid var(--gold);background:#000;min-height:240px;position:relative}
+#reader video{width:100%!important;display:block}
+.cam-off{display:grid;place-items:center;min-height:240px;color:var(--muted);text-align:center;padding:20px;font-size:.9rem}
+.manual{display:flex;gap:8px;margin-top:12px}
+.manual input{text-transform:uppercase;letter-spacing:.05em}
+.manual .btn{width:auto;padding:0 20px}
+
+.result{position:fixed;inset:0;z-index:20;display:flex;flex-direction:column;justify-content:center;padding:24px;text-align:center;animation:pop .2s ease-out}
+@keyframes pop{from{opacity:0;transform:scale(.96)}}
+.result.OK{background:var(--ok)}
+.result.UNVERIFIED{background:var(--warn)}
+.result.USED,.result.NOT_FOUND,.result.WRONG_NIGHT,.result.ERROR{background:var(--bad)}
+.r-icon{font-size:4.5rem;line-height:1}
+.r-title{font-family:Cinzel,serif;font-weight:900;font-size:2rem;margin-top:10px;letter-spacing:.04em}
+.r-admit{font-family:Cinzel,serif;font-weight:900;font-size:3.2rem;line-height:1.1;margin:10px 0}
+.r-msg{font-size:1rem;opacity:.95;max-width:420px;margin:6px auto 0}
+.r-details{background:rgba(0,0,0,.22);border-radius:16px;padding:14px 18px;margin:18px auto 0;max-width:420px;text-align:left;font-size:.92rem}
+.r-details div{display:flex;justify-content:space-between;gap:12px;padding:4px 0;border-bottom:1px dashed rgba(255,255,255,.25)}
+.r-details div:last-child{border:0}
+.r-details span{opacity:.8}
+.r-actions{display:flex;flex-direction:column;gap:10px;max-width:420px;width:100%;margin:22px auto 0}
+.r-actions .btn{background:rgba(0,0,0,.28);color:#fff;border:1.5px solid rgba(255,255,255,.7)}
+.r-actions .btn.primary{background:#fff;color:#111;border:0}
+.r-bar{height:4px;background:rgba(255,255,255,.35);border-radius:4px;max-width:420px;margin:18px auto 0;overflow:hidden}
+.r-bar i{display:block;height:100%;background:#fff;animation:drain 2.5s linear forwards}
+@keyframes drain{from{width:100%}to{width:0}}
+
+.log h3{font-family:Cinzel,serif;font-size:.95rem;margin-bottom:8px}
+.log-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line);font-size:.85rem}
+.log-row:last-child{border:0}
+.dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.busy{position:fixed;inset:0;z-index:15;background:rgba(0,0,0,.55);display:grid;place-items:center;font-family:Cinzel,serif;color:var(--gold2)}
+</style>
+</head>
+<body>
+
+<!-- ============ LOGIN ============ -->
+<div class="wrap" id="login">
+  <div style="text-align:center;margin-top:8vh">
+    <div class="brand" style="font-size:1.6rem">ADI SHAKTI<small style="font-size:2rem">Garba</small></div>
+    <div class="sub" style="margin-top:12px;letter-spacing:.25em;font-family:Cinzel,serif">GATE STAFF ONLY</div>
+  </div>
+  <form class="card" id="loginForm">
+    <h1 class="gold">Gate Scanner</h1>
+    <p class="sub">Enter the staff PIN to start checking tickets</p>
+    <label for="pin">Staff PIN</label>
+    <input id="pin" type="password" inputmode="numeric" autocomplete="off" required>
+    <label for="night">Tonight's night</label>
+    <select id="night"><option value="16">Oct 16 · Night 1</option><option value="17">Oct 17 · Night 2</option><option value="18">Oct 18 · Grand Finale</option></select>
+    <label for="gate">Gate / staff name</label>
+    <input id="gate" placeholder="e.g. Main Gate – Rahul" maxlength="30">
+    <div class="err" id="loginErr"></div>
+    <button class="btn btn-gold" id="loginBtn" style="margin-top:8px">Start Scanning →</button>
+  </form>
+</div>
+
+<!-- ============ SCANNER ============ -->
+<div class="wrap" id="app" hidden>
+  <header>
+    <div class="brand">ADI SHAKTI<small>Gate Scanner</small></div>
+    <div style="display:flex;gap:6px">
+      <button class="pill" id="nightPill"></button>
+      <button class="pill" id="logout">Lock</button>
+    </div>
+  </header>
+
+  <div class="stats">
+    <div class="stat"><b class="gold" id="sIn">0</b><small>People in</small></div>
+    <div class="stat"><b class="gold" id="sExp">0</b><small>Expected</small></div>
+    <div class="stat"><b class="gold" id="sTix">0/0</b><small>Tickets</small></div>
+  </div>
+  <div class="bar"><i id="sBar"></i></div>
+
+  <div id="reader"><div class="cam-off" id="camOff">📷<br>Starting camera…</div></div>
+
+  <form class="manual" id="manualForm">
+    <input id="manualCode" placeholder="ASG-123-456-7890" autocomplete="off" aria-label="Ticket code">
+    <button class="btn btn-gold">Check</button>
+  </form>
+  <p class="sub" style="margin-top:6px;font-size:.75rem">Point the camera at the ticket's QR code (or barcode), or type the ticket code</p>
+
+  <div class="card log">
+    <h3 class="gold">Recent scans</h3>
+    <div id="log"><p class="sub" style="text-align:left">No scans yet.</p></div>
+  </div>
+</div>
+
+<div class="busy" id="busy" hidden>Checking…</div>
+<div class="result" id="result" hidden></div>
+
+<script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<script src="config.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const ss={get(k){try{return JSON.parse(sessionStorage.getItem(k))}catch{return null}},set(k,v){try{sessionStorage.setItem(k,JSON.stringify(v))}catch{}},del(k){try{sessionStorage.removeItem(k)}catch{}}};
+const CODE_RE=/^ASG-\d{3}-\d{3}-\d{4}$/;
+let session=null, scanner=null, busy=false, lastCode="", lastAt=0, log=[];
+
+// Default the night picker to today's date during the event
+(()=>{const d=new Date(),m=d.getMonth(),day=d.getDate();if(m===9&&day>=16&&day<=18)$("#night").value=String(day)})();
+
+// Google sometimes loses a reply: retry with the same request id (the server answers repeats without checking in twice)
+async function api(body){
+  if(!CONFIG.sheetUrl)throw new Error("sheetUrl is not set in config.js");
+  const rid=crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2,12);
+  let lastErr;
+  for(let i=0;i<4;i++){
+    try{
+      const r=await fetch(CONFIG.sheetUrl,{method:"POST",body:JSON.stringify({...body,rid})}).then(r=>r.json());
+      if(r&&r.status!=="NO_POST")return r;
+    }catch(e){lastErr=e}
+    await new Promise(r=>setTimeout(r,600*(i+1)));
+  }
+  throw lastErr||new Error("Server didn't answer");
+}
+
+/* ---------- Login ---------- */
+$("#loginForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const s={pin:$("#pin").value.trim(),night:$("#night").value,gate:$("#gate").value.trim()||"Gate"};
+  $("#loginBtn").disabled=true;$("#loginErr").textContent="";
+  try{
+    const r=await api({action:"stats",pin:s.pin,night:s.night});
+    if(!r.ok){$("#loginErr").textContent=r.error||"Login failed";return}
+    session=s;ss.set("asg_gate",s);start(r);
+  }catch(err){$("#loginErr").textContent="Can't reach the server: "+err.message}
+  finally{$("#loginBtn").disabled=false}
+});
+$("#logout").onclick=()=>{ss.del("asg_gate");location.reload()};
+$("#nightPill").onclick=()=>{if(confirm("Change night? You'll need to log in again."))$("#logout").click()};
+
+function start(stats){
+  $("#login").hidden=true;$("#app").hidden=false;
+  $("#nightPill").textContent=`🌙 Oct ${session.night}`;
+  renderStats(stats);startCamera();
+  setInterval(refreshStats,30000);
+}
+async function refreshStats(){try{const r=await api({action:"stats",pin:session.pin,night:session.night});if(r.ok)renderStats(r)}catch{}}
+function renderStats(s){
+  $("#sIn").textContent=s.inAdmits;$("#sExp").textContent=s.admits;$("#sTix").textContent=`${s.inTickets}/${s.tickets}`;
+  $("#sBar").style.width=(s.admits?Math.min(100,s.inAdmits/s.admits*100):0)+"%";
+}
+
+/* ---------- Camera ---------- */
+async function startCamera(){
+  if(!window.Html5Qrcode){$("#camOff").innerHTML="Camera scanner couldn't load.<br>Use manual entry below.";return}
+  $("#reader").innerHTML="";
+  const F=Html5QrcodeSupportedFormats;
+  scanner=new Html5Qrcode("reader",{formatsToSupport:[F.CODE_128,F.QR_CODE],experimentalFeatures:{useBarCodeDetectorIfSupported:true},verbose:false});
+  try{
+    await scanner.start({facingMode:"environment"},
+      {fps:12,qrbox:(w,h)=>({width:Math.floor(Math.min(w*.92,460)),height:Math.floor(Math.min(h*.55,180))}),aspectRatio:1.333},
+      onScan,()=>{});
+  }catch(err){
+    $("#reader").innerHTML=`<div class="cam-off">📷 Camera not available<br><small>${esc(err.message||err)}</small><br><small>Allow camera access (the site must be on HTTPS), or type codes below.</small></div>`;
+    scanner=null;
+  }
+}
+function onScan(text){
+  let code=text.trim().toUpperCase();
+  if(/^\d{10}$/.test(code))code=`ASG-${code.slice(0,3)}-${code.slice(3,6)}-${code.slice(6)}`;   // ticket barcodes carry digits only
+  if(busy)return;
+  if(code===lastCode&&Date.now()-lastAt<4000)return;   // ignore the same barcode seen again straight away
+  lastCode=code;lastAt=Date.now();
+  check(code);
+}
+$("#manualForm").addEventListener("submit",e=>{
+  e.preventDefault();let c=$("#manualCode").value.trim().toUpperCase().replace(/\s+/g,"");
+  if(/^\d{10}$/.test(c))c=`ASG-${c.slice(0,3)}-${c.slice(3,6)}-${c.slice(6)}`;
+  if(!c)return;$("#manualCode").value="";check(c);
+});
+
+/* ---------- Check-in ---------- */
+async function check(code,force=false){
+  if(!CODE_RE.test(code))return show({status:"NOT_FOUND",code,msg:"This isn't an Adi Shakti Garba ticket code."});
+  busy=true;try{scanner?.pause(true)}catch{}
+  $("#busy").hidden=false;
+  try{
+    const r=await api({action:"checkin",pin:session.pin,night:session.night,gate:session.gate,code,force});
+    if(r.status==="BAD_PIN"){alert("Staff PIN changed. Please log in again.");return $("#logout").click()}
+    if(!r.ok&&!r.status)return show({status:"ERROR",code,msg:r.error});
+    show({...r,code});
+  }catch(err){show({status:"ERROR",code,msg:"No connection. Check internet and try again."})}
+  finally{$("#busy").hidden=true}
+}
+
+const VIEW={
+  OK:         {icon:"✅",title:"ENTRY ALLOWED"},
+  UNVERIFIED: {icon:"⚠️",title:"PAYMENT NOT VERIFIED"},
+  USED:       {icon:"⛔",title:"ALREADY USED"},
+  WRONG_NIGHT:{icon:"📅",title:"WRONG NIGHT"},
+  NOT_FOUND:  {icon:"❌",title:"INVALID TICKET"},
+  ERROR:      {icon:"📶",title:"COULDN'T CHECK"},
+};
+function show(r){
+  const v=VIEW[r.status]||VIEW.ERROR,t=r.ticket;
+  feedback(r.status==="OK"?"ok":r.status==="UNVERIFIED"?"warn":"bad");
+  let msg=r.msg||"";
+  if(r.status==="USED")msg=`This ticket was already scanned tonight at ${esc(r.usedAt)}.`;
+  if(r.status==="WRONG_NIGHT")msg=`This ticket is valid for ${esc(t.nights)}, not Oct ${session.night}.`;
+  if(r.status==="NOT_FOUND"&&!msg)msg="No booking found with this code. Send the guest to the help desk.";
+  if(r.status==="UNVERIFIED")msg=`The organisers haven't confirmed this payment yet. Check the UTR (${esc(t.ref)}) with them before letting the guest in.`;
+  const details=t?`<div class="r-details">
+    <div><span>Name</span><b>${esc(t.name)}</b></div>
+    <div><span>Pass</span><b>${esc(t.pass)}</b></div>
+    <div><span>Nights</span><b>${esc(t.nights)}</b></div>
+    <div><span>Mobile</span><b>${esc(t.mobile)}</b></div>
+    <div><span>Code</span><b>${esc(t.code)}</b></div></div>`:`<div class="r-details"><div><span>Code</span><b>${esc(r.code)}</b></div></div>`;
+  const admit=t&&(r.status==="OK"||r.status==="UNVERIFIED")?`<div class="r-admit">ADMIT ${t.admits}</div>`:"";
+  const actions=r.status==="UNVERIFIED"
+    ?`<button class="btn primary" id="rForce">Admit anyway (I checked)</button><button class="btn" id="rNext">Deny · Scan next</button>`
+    :r.status==="ERROR"?`<button class="btn primary" id="rRetry">Try again</button><button class="btn" id="rNext">Scan next</button>`
+    :`<button class="btn ${r.status==="OK"?"":"primary"}" id="rNext">Scan next</button>`;
+  const el=$("#result");el.className="result "+(VIEW[r.status]?r.status:"ERROR");el.hidden=false;
+  el.innerHTML=`<div class="r-icon">${v.icon}</div><div class="r-title">${v.title}</div>${admit}<p class="r-msg">${msg}</p>${details}
+    <div class="r-actions">${actions}</div>${r.status==="OK"?'<div class="r-bar"><i></i></div>':""}`;
+  $("#rNext").onclick=next;
+  if($("#rForce"))$("#rForce").onclick=()=>{el.hidden=true;check(r.code,true)};
+  if($("#rRetry"))$("#rRetry").onclick=()=>{el.hidden=true;check(r.code,!!r.force)};
+  clearTimeout(show._t);
+  if(r.status==="OK")show._t=setTimeout(next,2500);
+  addLog(r);
+  if(r.status==="OK")refreshStats();
+}
+function next(){clearTimeout(show._t);$("#result").hidden=true;busy=false;try{scanner?.resume()}catch{}}
+
+function addLog(r){
+  const color={OK:"var(--ok)",UNVERIFIED:"var(--warn)"}[r.status]||"var(--bad)";
+  log.unshift({code:r.code,name:r.ticket?.name||"—",status:(VIEW[r.status]||VIEW.ERROR).title,color,time:new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"})});
+  log=log.slice(0,15);
+  $("#log").innerHTML=log.map(l=>`<div class="log-row"><span class="dot" style="background:${l.color}"></span><span style="flex:1"><b>${esc(l.name)}</b><br><small style="color:var(--muted)">${esc(l.code)} · ${esc(l.status)}</small></span><small style="color:var(--muted)">${l.time}</small></div>`).join("");
+}
+
+/* ---------- Beep + vibrate ---------- */
+let actx;
+function feedback(kind){
+  try{
+    actx=actx||new (window.AudioContext||window.webkitAudioContext)();
+    const tones=kind==="ok"?[880,1320]:kind==="warn"?[660,660]:[220,180];
+    tones.forEach((f,i)=>{const o=actx.createOscillator(),g=actx.createGain();o.frequency.value=f;o.type=kind==="bad"?"square":"sine";
+      g.gain.setValueAtTime(.18,actx.currentTime+i*.14);g.gain.exponentialRampToValueAtTime(.001,actx.currentTime+i*.14+.13);
+      o.connect(g).connect(actx.destination);o.start(actx.currentTime+i*.14);o.stop(actx.currentTime+i*.14+.14)});
+  }catch{}
+  navigator.vibrate?.(kind==="ok"?80:[200,80,200]);
+}
+
+/* ---------- Resume session after reload ---------- */
+(async()=>{const s=ss.get("asg_gate");if(!s)return;
+  try{const r=await api({action:"stats",pin:s.pin,night:s.night});if(r.ok){session=s;start(r)}else ss.del("asg_gate")}catch{}
+})();
+</script>
+</body>
+</html>
