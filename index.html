@@ -337,6 +337,7 @@ footer p{color:var(--muted);font-size:.85rem}
       <a href="#venue">Venue</a>
       <a href="#faq">FAQ</a>
       <a href="#contact">Contact</a>
+      <a href="#lookup">🎟️ My Ticket</a>
       <a href="#book" class="btn btn-gold">Book Tickets</a>
     </div>
   </div>
@@ -598,7 +599,7 @@ footer p{color:var(--muted);font-size:.85rem}
         <div class="sum-total"><span>Total</span><b class="gold-text" id="sTotal">₹0</b></div>
         <div class="secure"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> 100% secure UPI payment · E-ticket after payment check</div>
         <div class="my-tix" id="myTix"></div>
-        <details class="lookup" id="lookup"><summary>Already booked? Get my ticket</summary>
+        <details class="lookup" id="lookup"><summary>Already booked? Check status / Get my ticket</summary>
           <form class="in" id="lookupForm" novalidate>
             <div class="field"><input id="lCode" placeholder="Ticket code e.g. ASG-123-456-7890" autocomplete="off" aria-label="Ticket code"></div>
             <div class="field"><input id="lPhone" type="tel" inputmode="numeric" maxlength="10" placeholder="Mobile number used for booking" aria-label="Mobile number"></div>
@@ -712,7 +713,7 @@ footer p{color:var(--muted);font-size:.85rem}
 <footer>
   <div class="wrap">
     <div class="script">Let's Garba Again</div>
-    <div class="foot-links"><a href="#about">About</a><a href="#nights">Nights</a><a href="#passes">Passes</a><a href="#book">Book</a><a href="#venue">Venue</a><a href="#contact">Contact</a></div>
+    <div class="foot-links"><a href="#about">About</a><a href="#nights">Nights</a><a href="#passes">Passes</a><a href="#book">Book</a><a href="#venue">Venue</a><a href="#contact">Contact</a><a href="#lookup">My Ticket / Check Status</a></div>
     <p>Adi Shakti Garba 2026 · Presented by Sanskriti Banquet Mela, Gwalior</p>
     <p style="margin-top:6px;font-size:.75rem">© 2026 Adi Shakti Garba. All rights reserved.</p>
   </div>
@@ -990,6 +991,14 @@ function renderMyTix(){
     if(t.synced&&CONFIG.sheetUrl){try{const b=await fetchStatus(t.code,t.phone);saveLocal(b);if(booking&&booking.code===b.code)showBooking(b);}catch(e){}}});
 }
 renderMyTix();
+
+/* ---------- "My Ticket" links: open the status lookup (also works as a shareable link …/#lookup) ---------- */
+function openLookup(){
+  const l=$("#lookup");l.open=true;const list=$("#tixList");if(list)list.hidden=false;
+  setTimeout(()=>{($("#myTix").innerHTML?$("#myTix"):l).scrollIntoView({behavior:"smooth",block:"center"});if(!$("#myTix").innerHTML)$("#lCode").focus({preventScroll:true});},50);
+}
+$$('a[href="#lookup"]').forEach(a=>a.addEventListener("click",e=>{e.preventDefault();openLookup();}));
+if(location.hash==="#lookup")openLookup();
 
 /* ---------- Contact → WhatsApp ---------- */
 $("#contactForm").addEventListener("submit",e=>{
