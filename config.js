@@ -6,8 +6,8 @@ window.CONFIG = {
   // ← paste your Google Apps Script Web App URL here (see SETUP.md). Leave "" to run without a sheet.
   sheetUrl: "https://script.google.com/macros/s/AKfycbxEvaAMalQ5JiXJjx-avfMHHCi0DiIgsnfzFMMaQ0NCg5pAhB8IuMCjd4dpUJEcwrym/exec",
 
-  upiId:   "9009437767@ibl",            // PhonePe UPI ID (from the official PhonePe QR)
-  payeeName: "JITENDR KUMAR SHARMA",   // must match the bank account name shown in UPI apps
+  upiId:   "hp9876554@okhdfcbank",      // Google Pay UPI ID (read from the official GPay QR)
+  payeeName: "Himanshu Patel",          // must match the bank account name shown in UPI apps
   razorpayKey: "",                      // ← optional: "rzp_live_xxxx" to enable card/netbanking
   organiserWhatsApp: "918269737767",    // where booking confirmations are sent
   eventStart: "2026-10-16T19:00:00+05:30",

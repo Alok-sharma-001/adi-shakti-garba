@@ -242,7 +242,7 @@ function show(r){
   if(r.status==="USED")msg=`This ticket was already scanned tonight at ${esc(r.usedAt)}.`;
   if(r.status==="WRONG_NIGHT")msg=`This ticket is valid for ${esc(t.nights)}, not Oct ${session.night}.`;
   if(r.status==="NOT_FOUND"&&!msg)msg="No booking found with this code. Send the guest to the help desk.";
-  if(r.status==="UNVERIFIED")msg=`Payment of <b>₹${esc(t.amount)}</b> is NOT confirmed yet. Ask the organiser to check UTR <b>${esc(t.ref)}</b> in PhonePe. Do not admit if a lower amount was paid.`;
+  if(r.status==="UNVERIFIED")msg=`Payment of <b>₹${esc(t.amount)}</b> is NOT confirmed yet. Ask the organiser to check UTR <b>${esc(t.ref)}</b> in the payment app (GPay). Do not admit if a lower amount was paid.`;
   const details=t?`<div class="r-details">
     <div><span>Name</span><b>${esc(t.name)}</b></div>
     <div><span>Pass</span><b>${esc(t.pass)}</b></div>
@@ -258,7 +258,7 @@ function show(r){
   el.innerHTML=`<div class="r-icon">${v.icon}</div><div class="r-title">${v.title}</div>${admit}<p class="r-msg">${msg}</p>${details}
     <div class="r-actions">${actions}</div>${r.status==="OK"?'<div class="r-bar"><i></i></div>':""}`;
   $("#rNext").onclick=next;
-  if($("#rForce"))$("#rForce").onclick=()=>{if(!confirm(`Only admit if the organiser has seen the FULL ₹${t.amount} received in PhonePe for UTR ${t.ref}.\n\nAdmit this guest?`))return;el.hidden=true;check(r.code,true)};
+  if($("#rForce"))$("#rForce").onclick=()=>{if(!confirm(`Only admit if the organiser has seen the FULL ₹${t.amount} received in the payment app (GPay) for UTR ${t.ref}.\n\nAdmit this guest?`))return;el.hidden=true;check(r.code,true)};
   if($("#rRetry"))$("#rRetry").onclick=()=>{el.hidden=true;check(r.code,!!r.force)};
   clearTimeout(show._t);
   if(r.status==="OK")show._t=setTimeout(next,2500);
