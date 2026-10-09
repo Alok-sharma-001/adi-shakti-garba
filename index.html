@@ -240,7 +240,7 @@ nav.scrolled{background:rgba(11,6,4,.85);backdrop-filter:blur(12px);border-botto
 .t-holder{margin-top:14px;padding-top:12px;border-top:1px dashed rgba(232,186,96,.35);display:flex;gap:26px;flex-wrap:wrap;font-size:.75rem}
 .t-holder small{display:block;color:var(--gold);letter-spacing:.15em;font-size:.58rem}
 .t-holder b{font-size:.85rem}
-.t-paid{position:absolute!important;right:18px;bottom:16px;border:2px solid var(--ok);color:var(--ok);font-family:Cinzel,serif;font-weight:900;font-size:.8rem;letter-spacing:.15em;padding:4px 10px;border-radius:6px;transform:rotate(-10deg);opacity:.9}
+.t-paid{position:absolute!important;right:18px;bottom:16px;border:2px solid #ffb74d;color:#ffb74d;text-align:center;line-height:1.15;font-family:Cinzel,serif;font-weight:900;font-size:.8rem;letter-spacing:.15em;padding:4px 10px;border-radius:6px;transform:rotate(-10deg);opacity:.9}
 .t-stub{width:250px;flex-shrink:0;background:#e9e2d4;color:#1a0d08;position:relative;padding:18px 14px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;border-left:2px dashed #8a6b3f}
 .t-stub::before,.t-stub::after{content:"";position:absolute;left:-13px;width:24px;height:24px;border-radius:50%;background:var(--bg)}
 .t-stub::before{top:-12px}.t-stub::after{bottom:-12px}
@@ -571,7 +571,7 @@ footer p{color:var(--muted);font-size:.85rem}
 
         <!-- STEP 3 -->
         <div class="pane" id="pane3">
-          <h3 style="text-align:center">🎉 You're in! See you on the dance floor.</h3>
+          <h3 style="text-align:center">🎉 Booking received! Your ticket is ready.</h3>
           <div class="ticket-stage">
             <div id="ticketHolder" style="width:100%;display:flex;justify-content:center"></div>
             <div class="note" id="syncNote" hidden style="max-width:760px;border-color:#ff9b3d">⚠️ We couldn't reach our booking server, so this ticket isn't registered yet. Please tap <b>“Send to Organisers on WhatsApp”</b> below so it can be added before the event.</div>
@@ -580,7 +580,8 @@ footer p{color:var(--muted);font-size:.85rem}
               <a class="btn btn-ghost" id="waTicket" target="_blank" rel="noopener">Send to Organisers on WhatsApp</a>
               <button class="btn btn-ghost" id="newBooking">Book Another</button>
             </div>
-            <p style="color:var(--muted);font-size:.85rem;text-align:center;max-width:560px">Show this ticket's barcode at the gate. Each ticket is also saved on this device under <b>“My Tickets”</b>.</p>
+            <div class="note" style="max-width:760px">Your ticket becomes valid once the organisers match your UTR with the <b>full amount</b> received in their account. Tickets paid with a lower amount or a wrong UTR are <b>refused at the gate</b>.</div>
+            <p style="color:var(--muted);font-size:.85rem;text-align:center;max-width:560px">Show this ticket's QR code at the gate. Each ticket is also saved on this device under <b>“My Tickets”</b>.</p>
           </div>
         </div>
       </div>
@@ -875,7 +876,7 @@ async function issueTicket(pay){
     booking=b;
     const all=store.get("asg_tickets",[]).filter(t=>t.code!==b.code);all.unshift(b);store.set("asg_tickets",all);
     renderTicket(b);goStep(3);renderMyTix();$("#book").scrollIntoView({behavior:"smooth"});
-    toast("Booking confirmed! 🎉");
+    toast("Booking received! 🎉");
   }finally{
     lockEls.forEach((el,i)=>el.disabled=wasDisabled[i]);$("#confirmPay").textContent="I've Paid — Get My Ticket";
   }
@@ -897,10 +898,10 @@ function renderTicket(b){
       <div class="t-holder">
         <div><small>NAME</small><b>${esc(b.name)}</b></div>
         <div><small>MOBILE</small><b>+91 ${b.phone.slice(0,5)} ${b.phone.slice(5)}</b></div>
-        <div><small>AMOUNT</small><b>${inr(b.amount)} · ${b.payMethod}</b></div>
+        <div><small>AMOUNT TO PAY</small><b>${inr(b.amount)} · ${b.payMethod}</b></div>
         <div><small>TXN REF</small><b>${esc(b.payRef)}</b></div>
       </div>
-      <div class="t-paid">PAID ✓</div>
+      <div class="t-paid">VERIFICATION<br>PENDING</div>
     </div>
     <div class="t-stub">
       <div class="admit">ADMIT ${numWord(b.admit)}</div>
