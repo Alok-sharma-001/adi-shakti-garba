@@ -209,9 +209,6 @@ nav.scrolled{background:rgba(11,6,4,.85);backdrop-filter:blur(12px);border-botto
 .sum-total{display:flex;justify-content:space-between;align-items:baseline;margin-top:16px}
 .sum-total b{font-family:Cinzel,serif;font-size:2rem}
 .secure{display:flex;gap:8px;align-items:center;color:var(--muted);font-size:.78rem;margin-top:18px}
-.pay-tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
-.pay-tab{flex:1;min-width:120px;padding:12px;border-radius:12px;border:1px solid rgba(232,186,96,.3);background:#0f0805;color:var(--muted);cursor:pointer;font:500 .9rem Poppins}
-.pay-tab.on{border-color:var(--gold);color:var(--gold2);background:linear-gradient(170deg,#3b0c0e,#160a06)}
 .upi-box{display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center}
 @media(max-width:560px){.upi-box{grid-template-columns:1fr;justify-items:center;text-align:center}}
 .qr-wrap{background:#fff;padding:12px;border-radius:14px;box-shadow:0 0 0 4px var(--gold3)}
@@ -240,7 +237,7 @@ nav.scrolled{background:rgba(11,6,4,.85);backdrop-filter:blur(12px);border-botto
 .t-holder{margin-top:14px;padding-top:12px;border-top:1px dashed rgba(232,186,96,.35);display:flex;gap:26px;flex-wrap:wrap;font-size:.75rem}
 .t-holder small{display:block;color:var(--gold);letter-spacing:.15em;font-size:.58rem}
 .t-holder b{font-size:.85rem}
-.t-paid{position:absolute!important;right:18px;bottom:16px;border:2px solid #ffb74d;color:#ffb74d;text-align:center;line-height:1.15;font-family:Cinzel,serif;font-weight:900;font-size:.8rem;letter-spacing:.15em;padding:4px 10px;border-radius:6px;transform:rotate(-10deg);opacity:.9}
+.t-paid{position:absolute!important;right:18px;bottom:16px;border:2px solid var(--ok);color:var(--ok);text-align:center;line-height:1.15;font-family:Cinzel,serif;font-weight:900;font-size:.8rem;letter-spacing:.15em;padding:4px 10px;border-radius:6px;transform:rotate(-10deg);opacity:.9}
 .t-stub{width:250px;flex-shrink:0;background:#e9e2d4;color:#1a0d08;position:relative;padding:18px 14px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;border-left:2px dashed #8a6b3f}
 .t-stub::before,.t-stub::after{content:"";position:absolute;left:-13px;width:24px;height:24px;border-radius:50%;background:var(--bg)}
 .t-stub::before{top:-12px}.t-stub::after{bottom:-12px}
@@ -257,6 +254,12 @@ nav.scrolled{background:rgba(11,6,4,.85);backdrop-filter:blur(12px);border-botto
   .t-info{grid-template-columns:1fr 1fr}
   .t-paid{position:static!important;display:inline-block;margin-top:14px}
 }
+.pending-card{width:100%;max-width:560px;margin:0 auto;border:1.5px dashed var(--gold);border-radius:16px;padding:18px 22px;background:#0f0805}
+.pending-card .badge-p{display:inline-block;background:rgba(255,183,77,.15);color:#ffb74d;border:1px solid #ffb74d;border-radius:999px;padding:4px 12px;font-size:.75rem;font-weight:600;margin-bottom:10px}
+.lookup{margin-top:16px}
+.lookup .in{padding:0 16px 16px}
+.lookup .field{margin-bottom:10px}
+.tix-row .st{font-size:.7rem;display:block;text-align:right}
 .ticket-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
 
 /* ===== VENUE ===== */
@@ -530,11 +533,6 @@ footer p{color:var(--muted);font-size:.85rem}
         <!-- STEP 2 -->
         <div class="pane" id="pane2">
           <h3>2 · Complete payment</h3>
-          <div class="pay-tabs">
-            <button class="pay-tab on" data-tab="upi">📱 UPI / QR</button>
-            <button class="pay-tab" data-tab="online" id="tabOnline">💳 Card / Netbanking</button>
-          </div>
-
           <div id="payUpi">
             <div class="upi-box">
               <div class="qr-wrap"><div id="qr"></div></div>
@@ -550,38 +548,41 @@ footer p{color:var(--muted);font-size:.85rem}
             </div>
             <div class="field" style="margin-top:22px">
               <label for="fUtr">After paying, enter the 12-digit UTR / Transaction ID *</label>
-              <input id="fUtr" inputmode="numeric" maxlength="22" placeholder="e.g. 428312345678">
-              <span class="err">Enter a valid UTR / transaction reference (min. 10 characters)</span>
+              <input id="fUtr" inputmode="numeric" maxlength="12" autocomplete="off" placeholder="12 digits, e.g. 428312345678">
+              <span class="err">UTR must be exactly 12 digits. Find it in your UPI app → payment details (UPI Ref No. / UTR).</span>
             </div>
-            <div class="note">Your ticket is issued straight away with the UTR printed on it. The organisers check each UTR against their bank statement before the event, so please enter it correctly.</div>
-          </div>
-
-          <div id="payOnline" style="display:none">
-            <p style="color:var(--muted)">Pay securely with debit/credit card, netbanking or wallets through Razorpay.</p>
-            <div class="serif gold-text" style="font-size:2.2rem;font-weight:900;margin:10px 0" id="payAmt2">₹0</div>
-            <button class="btn btn-gold" id="rzpBtn">Pay Securely →</button>
-            <div class="note" id="rzpNote"></div>
+            <div class="note">After you submit, the organisers match your UTR with the money received. <b>Your entry ticket (QR code) unlocks only after the full amount is confirmed.</b> Wrong UTR or a lower amount = no ticket.</div>
           </div>
 
           <div class="row-btns">
             <button class="btn btn-ghost" id="back1">← Back</button>
-            <button class="btn btn-gold" id="confirmPay">I've Paid — Get My Ticket</button>
+            <button class="btn btn-gold" id="confirmPay">I've Paid — Submit Booking</button>
           </div>
         </div>
 
         <!-- STEP 3 -->
         <div class="pane" id="pane3">
-          <h3 style="text-align:center">🎉 Booking received! Your ticket is ready.</h3>
-          <div class="ticket-stage">
-            <div id="ticketHolder" style="width:100%;display:flex;justify-content:center"></div>
-            <div class="note" id="syncNote" hidden style="max-width:760px;border-color:#ff9b3d">⚠️ We couldn't reach our booking server, so this ticket isn't registered yet. Please tap <b>“Send to Organisers on WhatsApp”</b> below so it can be added before the event.</div>
-            <div class="ticket-actions">
-              <button class="btn btn-gold" id="dlTicket">⬇ Download Ticket</button>
+          <div id="pendingView">
+            <h3 style="text-align:center">⏳ Booking received! Payment under verification</h3>
+            <div class="pending-card" id="pendingCard"></div>
+            <div class="note" id="syncNote" hidden style="max-width:560px;margin:14px auto 0;border-color:#ff9b3d">⚠️ We couldn't reach our booking server, so this booking isn't registered yet. Please tap <b>“Send to Organisers on WhatsApp”</b> below so it can be added.</div>
+            <div class="note" style="max-width:560px;margin:14px auto 0">Your entry ticket with QR code unlocks <b>once the organisers confirm the full amount</b> in their account (usually within a few hours). Come back to this page and tap <b>Check status</b>. On another phone? Use <b>“Already booked? Get my ticket”</b> with your ticket code and mobile number.</div>
+            <div class="ticket-actions" style="margin-top:18px">
+              <button class="btn btn-gold" id="checkStatus">🔄 Check status</button>
               <a class="btn btn-ghost" id="waTicket" target="_blank" rel="noopener">Send to Organisers on WhatsApp</a>
-              <button class="btn btn-ghost" id="newBooking">Book Another</button>
+              <button class="btn btn-ghost js-new">Book Another</button>
             </div>
-            <div class="note" style="max-width:760px">Your ticket becomes valid once the organisers match your UTR with the <b>full amount</b> received in their account. Tickets paid with a lower amount or a wrong UTR are <b>refused at the gate</b>.</div>
-            <p style="color:var(--muted);font-size:.85rem;text-align:center;max-width:560px">Show this ticket's QR code at the gate. Each ticket is also saved on this device under <b>“My Tickets”</b>.</p>
+          </div>
+          <div id="ticketView" hidden>
+            <h3 style="text-align:center">🎉 Payment verified! Your ticket is ready.</h3>
+            <div class="ticket-stage">
+              <div id="ticketHolder" style="width:100%;display:flex;justify-content:center"></div>
+              <div class="ticket-actions">
+                <button class="btn btn-gold" id="dlTicket">⬇ Download Ticket</button>
+                <button class="btn btn-ghost js-new">Book Another</button>
+              </div>
+              <p style="color:var(--muted);font-size:.85rem;text-align:center;max-width:560px">Show this ticket's QR code at the gate. It is also saved on this device under <b>“My Tickets”</b>.</p>
+            </div>
           </div>
         </div>
       </div>
@@ -595,8 +596,15 @@ footer p{color:var(--muted);font-size:.85rem}
         <div class="sum-line"><span>Price × Qty</span><b id="sPrice">—</b></div>
         <div class="sum-line"><span>Convenience fee</span><b style="color:var(--ok)">FREE</b></div>
         <div class="sum-total"><span>Total</span><b class="gold-text" id="sTotal">₹0</b></div>
-        <div class="secure"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> 100% secure UPI payment · Instant e-ticket</div>
+        <div class="secure"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> 100% secure UPI payment · E-ticket after payment check</div>
         <div class="my-tix" id="myTix"></div>
+        <details class="lookup" id="lookup"><summary>Already booked? Get my ticket</summary>
+          <form class="in" id="lookupForm" novalidate>
+            <div class="field"><input id="lCode" placeholder="Ticket code e.g. ASG-123-456-7890" autocomplete="off" aria-label="Ticket code"></div>
+            <div class="field"><input id="lPhone" type="tel" inputmode="numeric" maxlength="10" placeholder="Mobile number used for booking" aria-label="Mobile number"></div>
+            <button class="btn btn-gold" id="lBtn" style="width:100%;padding:12px">Find my ticket</button>
+          </form>
+        </details>
       </aside>
     </div>
   </div>
@@ -632,7 +640,7 @@ footer p{color:var(--muted);font-size:.85rem}
       <h2>Questions? <span class="script gold-text">Answers</span></h2>
     </div>
     <div class="faq reveal">
-      <details open><summary>How will I receive my ticket?</summary><p>Once you pay, your e-ticket with a unique barcode appears on screen. Download it, or take a screenshot, and show it at the entry gate. Your tickets are also saved under "My Tickets" on this device.</p></details>
+      <details open><summary>How will I receive my ticket?</summary><p>Pay by UPI and submit your 12-digit UTR. The organisers confirm the payment (usually within a few hours), then your e-ticket with its QR code unlocks: tap "Check status" on the booking page, or use "Already booked? Get my ticket" with your ticket code and mobile number. Download it and show the QR code at the gate.</p></details>
       <details><summary>Is traditional attire compulsory?</summary><p>Traditional attire is strongly encouraged: chaniya choli, kediyu, kurta and similar outfits. It's a big part of the fun, and the best-dressed get prizes!</p></details>
       <details><summary>Will dandiya sticks be available at the venue?</summary><p>Yes, dandiya sticks will be on sale at the venue. You are also welcome to bring your own.</p></details>
       <details><summary>Are children allowed? Do they need a ticket?</summary><p>Absolutely, it's a family-friendly event! Children under 5 enter free with a ticketed adult. Children 5 and above need a pass.</p></details>
@@ -818,13 +826,11 @@ $("#pane1").addEventListener("submit",e=>{
   const p=getPass(),q=getQty();
   booking={code:genCode(),name,phone,email,city:$("#fCity").value.trim(),pass:p.name,passId:p.id,qty:q,admit:p.admit*q,
     night:$("input[name=night]:checked").value,nights:nightsLabel(p),amount:p.price*q,createdAt:new Date().toISOString()};
-  const amt=inr(booking.amount);$("#payAmt").textContent=amt;$("#payAmt2").textContent=amt;
+  $("#payAmt").textContent=inr(booking.amount);
   $("#upiIdTxt").textContent=CONFIG.upiId;$("#payeeTxt").textContent=CONFIG.payeeName;
   const upi=`upi://pay?pa=${CONFIG.upiId}&pn=${encodeURIComponent(CONFIG.payeeName)}&am=${booking.amount}.00&cu=INR&tn=${encodeURIComponent("Garba "+booking.code)}`;
   $("#upiLink").href=upi;$("#qr").innerHTML="";
   if(window.QRCode)new QRCode($("#qr"),{text:upi,width:360,height:360,colorDark:"#1a0d08",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.M});
-  $("#rzpNote").textContent=CONFIG.razorpayKey?"You'll be redirected to Razorpay's secure checkout.":"Card payments are coming soon. Please use UPI for now.";
-  $("#rzpBtn").disabled=!CONFIG.razorpayKey;
   goStep(2);$("#book").scrollIntoView({behavior:"smooth"});
 });
 $("#back1").onclick=()=>goStep(1);
@@ -832,24 +838,12 @@ $("#saveQr").onclick=()=>{const c=$("#qr canvas");if(!c)return;const a=document.
   const o=document.createElement("canvas");o.width=c.width+40;o.height=c.height+40;const x=o.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,o.width,o.height);x.drawImage(c,20,20);
   a.href=o.toDataURL("image/png");a.click();toast("QR saved. Open your UPI app → Scan → Gallery");};
 $("#upiCopy").onclick=()=>{navigator.clipboard?.writeText(CONFIG.upiId).then(()=>toast("UPI ID copied ✓"),()=>{})};
-$$(".pay-tab").forEach(t=>t.onclick=()=>{$$(".pay-tab").forEach(x=>x.classList.toggle("on",x===t));
-  const upi=t.dataset.tab==="upi";$("#payUpi").style.display=upi?"block":"none";$("#payOnline").style.display=upi?"none":"block";$("#confirmPay").style.display=upi?"inline-flex":"none"});
 
 /* Step 2 → 3 (UPI) */
 $("#confirmPay").onclick=()=>{
-  const utr=$("#fUtr").value.trim();
-  if(!setErr("#fUtr",!/^[A-Za-z0-9]{10,22}$/.test(utr)))return toast("Please enter your UTR / transaction ID");
+  const utr=$("#fUtr").value.replace(/\s/g,"");
+  if(!setErr("#fUtr",!/^\d{12}$/.test(utr)))return toast("UTR must be exactly 12 digits");
   issueTicket({method:"UPI",ref:utr});
-};
-
-/* Razorpay (optional) */
-$("#rzpBtn").onclick=()=>{
-  if(!CONFIG.razorpayKey)return;
-  const go=()=>new Razorpay({key:CONFIG.razorpayKey,amount:booking.amount*100,currency:"INR",name:"Adi Shakti Garba",description:`${booking.pass} × ${booking.qty}`,
-    prefill:{name:booking.name,contact:booking.phone,email:booking.email},notes:{ticket:booking.code},theme:{color:"#b9853a"},
-    handler:r=>issueTicket({method:"Razorpay",ref:r.razorpay_payment_id})}).open();
-  if(window.Razorpay)return go();
-  const s=document.createElement("script");s.src="https://checkout.razorpay.com/v1/checkout.js";s.onload=go;document.body.appendChild(s);
 };
 
 /* Talk to the Google Sheet. Google sometimes loses a reply, so retry with the same request id:
@@ -868,10 +862,9 @@ async function sheetCall(body){
 }
 
 async function issueTicket(pay){
-  const b={...booking,payMethod:pay.method,payRef:pay.ref,status:"PAID",synced:false};
-  const lockEls=[$("#confirmPay"),$("#back1"),$("#rzpBtn"),...$$(".pay-tab")];
-  const wasDisabled=lockEls.map(el=>el.disabled);
-  lockEls.forEach(el=>el.disabled=true);$("#confirmPay").textContent="Confirming…";
+  const b={...booking,payMethod:pay.method,payRef:pay.ref,verified:false,synced:false};
+  const lockEls=[$("#confirmPay"),$("#back1")];
+  lockEls.forEach(el=>el.disabled=true);$("#confirmPay").textContent="Submitting…";
   try{
     if(CONFIG.sheetUrl){
       try{
@@ -881,14 +874,61 @@ async function issueTicket(pay){
         Object.assign(b,{code:r.code,amount:r.amount,synced:true});
       }catch(e){ console.warn("Sheet sync failed",e); }
     }
-    booking=b;
-    const all=store.get("asg_tickets",[]).filter(t=>t.code!==b.code);all.unshift(b);store.set("asg_tickets",all);
-    renderTicket(b);goStep(3);renderMyTix();$("#book").scrollIntoView({behavior:"smooth"});
+    saveLocal(b);showBooking(b);$("#book").scrollIntoView({behavior:"smooth"});
     toast("Booking received! 🎉");
   }finally{
-    lockEls.forEach((el,i)=>el.disabled=wasDisabled[i]);$("#confirmPay").textContent="I've Paid — Get My Ticket";
+    lockEls.forEach(el=>el.disabled=false);$("#confirmPay").textContent="I've Paid — Submit Booking";
   }
 }
+
+/* ---------- Pending vs verified ---------- */
+// The entry QR is shown only when the sheet says the organiser ticked "Payment Verified".
+function saveLocal(b){const all=store.get("asg_tickets",[]).filter(t=>t&&t.code!==b.code);all.unshift(b);store.set("asg_tickets",all);renderMyTix();}
+function showBooking(b){
+  booking=b;
+  $("#pendingView").hidden=!!b.verified;$("#ticketView").hidden=!b.verified;
+  if(b.verified)renderTicket(b);else{$("#ticketHolder").innerHTML="";renderPending(b);}   // never leave an entry QR on the page for an unverified booking
+  goStep(3);
+}
+function renderPending(b){
+  $("#pendingCard").innerHTML=`<span class="badge-p">⏳ PAYMENT VERIFICATION PENDING</span>
+    <div class="sum-line"><span>Ticket code</span><b>${b.code}</b></div>
+    <div class="sum-line"><span>Name</span><b>${esc(b.name)}</b></div>
+    <div class="sum-line"><span>Pass</span><b>${esc(b.pass)} × ${b.qty} (Admit ${b.admit})</b></div>
+    <div class="sum-line"><span>Night</span><b>${esc(b.nights)}</b></div>
+    <div class="sum-line"><span>Amount to pay</span><b>${inr(b.amount)}</b></div>
+    <div class="sum-line"><span>Your UTR</span><b>${esc(b.payRef)}</b></div>`;
+  $("#syncNote").hidden=!!(b.synced||!CONFIG.sheetUrl);
+  $("#checkStatus").hidden=!(b.synced&&CONFIG.sheetUrl);
+  const msg=`🪔 *Adi Shakti Garba – New Booking*\n\nTicket: ${b.code}\nName: ${b.name}\nMobile: ${b.phone}\nPass: ${b.pass} × ${b.qty} (Admit ${b.admit})\nNight(s): ${b.nights}\nAmount: ${inr(b.amount)}\nUTR: ${b.payRef}\n\nPlease verify my payment.`;
+  $("#waTicket").href=`https://wa.me/${CONFIG.organiserWhatsApp}?text=${encodeURIComponent(msg)}`;
+}
+const fromServer=(t,verified)=>({code:t.code,name:t.name,phone:t.phone,pass:t.pass,qty:t.qty,admit:t.admits,nights:t.nights,amount:t.amount,payMethod:t.method,payRef:t.ref,verified:!!verified,synced:true});
+async function fetchStatus(code,phone){
+  const r=await sheetCall({action:"status",code,phone});
+  if(!r.ok)throw new Error(r.error||"No booking found");
+  return fromServer(r.ticket,r.verified);
+}
+$("#checkStatus").onclick=async()=>{
+  const btn=$("#checkStatus");btn.disabled=true;btn.textContent="Checking…";
+  try{const b=await fetchStatus(booking.code,booking.phone);saveLocal(b);showBooking(b);
+    toast(b.verified?"✅ Payment verified! Download your ticket.":"Still pending: the organisers haven't confirmed your payment yet.");}
+  catch(e){toast(e.message||"Couldn't check right now, please try again")}
+  finally{btn.disabled=false;btn.textContent="🔄 Check status";}
+};
+$("#lookupForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  let code=$("#lCode").value.trim().toUpperCase().replace(/\s+/g,"");
+  if(/^\d{10}$/.test(code))code=`ASG-${code.slice(0,3)}-${code.slice(3,6)}-${code.slice(6)}`;
+  const phone=$("#lPhone").value.replace(/\D/g,"");
+  if(!/^ASG-\d{3}-\d{3}-\d{4}$/.test(code)||!/^\d{10}$/.test(phone))return toast("Enter your ticket code and 10-digit mobile number");
+  if(!CONFIG.sheetUrl)return toast("Ticket lookup isn't available right now");
+  const btn=$("#lBtn");btn.disabled=true;btn.textContent="Searching…";
+  try{const b=await fetchStatus(code,phone);saveLocal(b);showBooking(b);$("#book").scrollIntoView({behavior:"smooth"});
+    toast(b.verified?"✅ Ticket found and verified":"Booking found: payment still pending");}
+  catch(err){toast(err.message||"Couldn't search right now")}
+  finally{btn.disabled=false;btn.textContent="Find my ticket";}
+});
 
 /* ---------- Ticket render ---------- */
 function renderTicket(b){
@@ -906,10 +946,10 @@ function renderTicket(b){
       <div class="t-holder">
         <div><small>NAME</small><b>${esc(b.name)}</b></div>
         <div><small>MOBILE</small><b>+91 ${b.phone.slice(0,5)} ${b.phone.slice(5)}</b></div>
-        <div><small>AMOUNT TO PAY</small><b>${inr(b.amount)} · ${b.payMethod}</b></div>
+        <div><small>AMOUNT PAID</small><b>${inr(b.amount)} · ${b.payMethod}</b></div>
         <div><small>TXN REF</small><b>${esc(b.payRef)}</b></div>
       </div>
-      <div class="t-paid">VERIFICATION<br>PENDING</div>
+      <div class="t-paid">PAID ✓<br>VERIFIED</div>
     </div>
     <div class="t-stub">
       <div class="admit">ADMIT ${numWord(b.admit)}</div>
@@ -918,12 +958,9 @@ function renderTicket(b){
       <div><div class="code">Ticket Code : ${b.code}</div><div class="mini">Scan QR or barcode at entry gate</div></div>
     </div>
   </div>`;
-  $("#syncNote").hidden=!!(b.synced||!CONFIG.sheetUrl);
   // Barcode holds the 10 digits only (compact Code 128-C, sharp 2px bars, wide quiet zone); the gate scanner turns them back into ASG-xxx-xxx-xxxx
   if(window.QRCode)new QRCode($("#ticketQr"),{text:b.code,width:240,height:240,colorDark:"#000000",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.M});
   if(window.JsBarcode)JsBarcode("#barcode",b.code.replace(/\D/g,""),{format:"CODE128C",displayValue:false,height:64,width:2,margin:20,background:"#ffffff",lineColor:"#000000"});
-  const msg=`🪔 *Adi Shakti Garba – New Booking*\n\nTicket: ${b.code}\nName: ${b.name}\nMobile: ${b.phone}\nPass: ${b.pass} × ${b.qty} (Admit ${b.admit})\nNight(s): ${b.nights}\nAmount: ${inr(b.amount)}\nPayment: ${b.payMethod} · Ref ${b.payRef}`;
-  $("#waTicket").href=`https://wa.me/${CONFIG.organiserWhatsApp}?text=${encodeURIComponent(msg)}`;
 }
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const numWord=n=>["","ONE","TWO","THREE","FOUR","FIVE","SIX","SEVEN","EIGHT","NINE","TEN"][n]||n;
@@ -939,7 +976,7 @@ $("#dlTicket").onclick=async()=>{
   catch(e){toast("Couldn't download, please take a screenshot instead")}
   btn.disabled=false;btn.textContent="⬇ Download Ticket";
 };
-$("#newBooking").onclick=()=>{$("#pane1").reset();$("#fCity").value="Gwalior";$("#fUtr").value="";booking=null;updateSummary();goStep(1)};
+$$(".js-new").forEach(b=>b.onclick=()=>{$("#pane1").reset();$("#fCity").value="Gwalior";$("#fUtr").value="";booking=null;updateSummary();goStep(1)});
 
 /* ---------- My Tickets (saved on device) ---------- */
 function renderMyTix(){
@@ -947,9 +984,10 @@ function renderMyTix(){
   const all=store.get("asg_tickets",[]).filter(t=>t&&/^ASG-\d{3}-\d{3}-\d{4}$/.test(t.code||"")&&Number(t.amount)>0);
   if(!all.length){$("#myTix").innerHTML="";return}
   $("#myTix").innerHTML=`<button id="tixToggle">🎟️ My Tickets (${all.length})</button><div class="tix-list" id="tixList" hidden>${
-    all.map((t,i)=>`<div class="tix-row" data-i="${i}"><span><b>${t.code}</b><br><small style="color:var(--muted)">${esc(t.name)} · ${t.nights}</small></span><span class="gold-text">${inr(t.amount)}</span></div>`).join("")}</div>`;
+    all.map((t,i)=>`<div class="tix-row" data-i="${i}"><span><b>${t.code}</b><br><small style="color:var(--muted)">${esc(t.name)} · ${t.nights}</small></span><span><span class="gold-text">${inr(t.amount)}</span><span class="st" style="color:${t.verified?"var(--ok)":"#ffb74d"}">${t.verified?"✅ Verified":"⏳ Pending"}</span></span></div>`).join("")}</div>`;
   $("#tixToggle").onclick=()=>{const l=$("#tixList");l.hidden=!l.hidden};
-  $$(".tix-row").forEach(r=>r.onclick=()=>{booking=all[+r.dataset.i];renderTicket(booking);goStep(3);$("#book").scrollIntoView({behavior:"smooth"})});
+  $$(".tix-row").forEach(r=>r.onclick=async()=>{const t=all[+r.dataset.i];showBooking(t);$("#book").scrollIntoView({behavior:"smooth"});
+    if(t.synced&&CONFIG.sheetUrl){try{const b=await fetchStatus(t.code,t.phone);saveLocal(b);if(booking&&booking.code===b.code)showBooking(b);}catch(e){}}});
 }
 renderMyTix();
 
