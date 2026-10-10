@@ -7,7 +7,8 @@
   <meta name="theme-color" content="#0b0604">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
     :root {
       --bg: #0b0604;
@@ -18,10 +19,11 @@
       --text: #f6e9d4;
       --muted: #bfa98a;
       --line: rgba(232, 186, 96, 0.25);
+      --green: #2ecc71;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(122, 15, 20, 0.5), transparent 70%), var(--bg);
+      background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(122, 15, 20, 0.55), transparent 70%), var(--bg);
       color: var(--text);
       font-family: 'Poppins', sans-serif;
       min-height: 100vh;
@@ -36,65 +38,74 @@
       background: var(--card);
       border: 1.5px solid var(--gold);
       border-radius: 24px;
-      padding: 32px 24px;
+      padding: 28px 20px;
       max-width: 440px;
       width: 100%;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.7), 0 0 40px rgba(232, 186, 96, 0.15);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.8), 0 0 40px rgba(232, 186, 96, 0.15);
       position: relative;
     }
     h1 {
       font-family: 'Cinzel', serif;
-      font-size: 1.7rem;
+      font-size: 1.6rem;
       background: var(--gold-grad);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
     .sub {
       color: var(--muted);
-      font-size: 0.85rem;
-      margin-bottom: 22px;
+      font-size: 0.82rem;
+      margin-bottom: 18px;
     }
-    .upi-badge {
+    .copy-card {
+      background: #0f0805;
+      border: 1.5px dashed var(--gold);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 20px;
+      cursor: pointer;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .copy-card:active { transform: scale(0.98); }
+    .upi-txt {
+      font-family: monospace;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--gold);
+      word-break: break-all;
+    }
+    .payee-txt {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+    .btn-copy {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      background: #0f0805;
-      border: 1px dashed var(--gold);
-      border-radius: 12px;
-      padding: 10px 16px;
-      font-family: monospace;
-      font-size: 1rem;
-      color: var(--gold);
-      cursor: pointer;
-      margin-bottom: 20px;
-      transition: transform 0.2s;
-    }
-    .upi-badge:hover { transform: scale(1.02); }
-    .upi-badge small { color: var(--muted); font-size: 0.75rem; }
-    .btn-main {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      width: 100%;
-      padding: 16px;
-      border-radius: 999px;
+      gap: 6px;
       background: var(--gold-grad);
       color: #2a1504;
       font-weight: 700;
-      font-size: 1.05rem;
-      text-decoration: none;
-      box-shadow: 0 8px 30px rgba(232, 186, 96, 0.4);
-      margin-bottom: 18px;
-      transition: transform 0.2s;
+      font-size: 0.88rem;
+      padding: 8px 18px;
+      border-radius: 999px;
+      margin-top: 10px;
+      border: 0;
+      cursor: pointer;
     }
-    .btn-main:hover { transform: translateY(-2px); }
+    .steps-heading {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
     .grid-apps {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
+      gap: 10px;
       margin-bottom: 22px;
     }
     .btn-app {
@@ -102,27 +113,54 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      padding: 12px;
+      padding: 13px 10px;
       border-radius: 14px;
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.06);
       border: 1px solid var(--line);
       color: var(--text);
-      font-size: 0.85rem;
+      font-size: 0.88rem;
       font-weight: 600;
       text-decoration: none;
-      transition: background 0.2s;
+      transition: background 0.2s, border-color 0.2s;
     }
-    .btn-app:hover { background: rgba(232, 186, 96, 0.15); border-color: var(--gold); }
-    .note {
-      background: rgba(232, 186, 96, 0.07);
-      border-left: 3px solid var(--gold);
+    .btn-app:active { background: rgba(232, 186, 96, 0.2); border-color: var(--gold); }
+    .qr-container {
+      background: #fff;
       padding: 12px;
+      border-radius: 16px;
+      display: inline-block;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+    .qr-container canvas, .qr-container img {
+      display: block;
+      margin: 0 auto;
+    }
+    .btn-save-qr {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--line);
+      color: var(--gold);
+      font-size: 0.82rem;
+      padding: 7px 16px;
+      border-radius: 999px;
+      cursor: pointer;
+      margin-bottom: 18px;
+      font-family: inherit;
+    }
+    .btn-save-qr:hover { background: rgba(232, 186, 96, 0.15); }
+    .note {
+      background: rgba(232, 186, 96, 0.08);
+      border-left: 3px solid var(--gold);
+      padding: 10px 14px;
       border-radius: 8px;
       font-size: 0.78rem;
       color: var(--muted);
       text-align: left;
       line-height: 1.5;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
     .btn-back {
       color: var(--gold);
@@ -135,6 +173,7 @@
       background: none;
       border: 0;
       font-family: inherit;
+      padding: 6px 12px;
     }
     .toast {
       position: fixed;
@@ -142,11 +181,12 @@
       left: 50%;
       transform: translateX(-50%) translateY(100px);
       background: #2a1504;
-      border: 1px solid var(--gold);
+      border: 1.5px solid var(--gold);
       color: var(--gold);
-      padding: 10px 20px;
+      padding: 10px 24px;
       border-radius: 999px;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
+      font-weight: 600;
       box-shadow: 0 10px 30px rgba(0,0,0,0.8);
       transition: transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
       pointer-events: none;
@@ -159,37 +199,42 @@
 
   <div class="box">
     <h1>Adi Shakti Garba</h1>
-    <div class="sub">Payee: Himanshu Patel · Official Pass Booking</div>
+    <div class="sub">Payee: Himanshu Patel · Official Payment</div>
 
-    <!-- Click to Copy UPI ID -->
-    <div class="upi-badge" id="copyBadge" onclick="copyUpi()" title="Tap to Copy">
-      <span>hp9876554@okhdfcbank</span>
-      <small>(Tap to Copy)</small>
+    <!-- 1. Copy Card -->
+    <div class="copy-card" onclick="copyUpi()" title="Tap to Copy">
+      <div class="payee-txt">Pay to UPI ID:</div>
+      <div class="upi-txt">hp9876554@okhdfcbank</div>
+      <div class="payee-txt">Name: Himanshu Patel</div>
+      <button class="btn-copy">📋 Tap to Copy UPI ID</button>
     </div>
 
-    <!-- 1-Click All UPI Apps Button -->
-    <a class="btn-main" id="autoPayBtn" href="upi://pay?pa=hp9876554@okhdfcbank&pn=Himanshu%20Patel&cu=INR&tn=Adi%20Shakti%20Garba%20Pass">
-      ⚡ Pay with Any UPI App
-    </a>
-
-    <!-- Direct App Buttons -->
+    <!-- 2. Open App Buttons -->
+    <div class="steps-heading">Step 2: Apna Payment App Kholein</div>
     <div class="grid-apps">
-      <a class="btn-app" href="upi://pay?pa=hp9876554@okhdfcbank&pn=Himanshu%20Patel&cu=INR&tn=Adi%20Shakti%20Garba">
-        🟢 Google Pay
-      </a>
-      <a class="btn-app" href="phonepe://pay?pa=hp9876554@okhdfcbank&pn=Himanshu%20Patel&cu=INR&tn=Adi%20Shakti%20Garba">
+      <a class="btn-app" href="phonepe://" onclick="copyUpiSilently()">
         🟣 PhonePe
       </a>
-      <a class="btn-app" href="paytmmp://pay?pa=hp9876554@okhdfcbank&pn=Himanshu%20Patel&cu=INR&tn=Adi%20Shakti%20Garba">
+      <a class="btn-app" href="tez://" onclick="copyUpiSilently()">
+        🟢 Google Pay
+      </a>
+      <a class="btn-app" href="paytmmp://" onclick="copyUpiSilently()">
         🔵 Paytm
       </a>
-      <a class="btn-app" href="upi://pay?pa=hp9876554@okhdfcbank&pn=Himanshu%20Patel&cu=INR&tn=Adi%20Shakti%20Garba">
+      <a class="btn-app" href="bhim://" onclick="copyUpiSilently()">
         🇮🇳 BHIM UPI
       </a>
     </div>
 
+    <!-- 3. QR Code Backup -->
+    <div class="steps-heading">Ya QR Code se Pay Karein</div>
+    <div class="qr-container" id="qrContainer"></div>
+    <div>
+      <button class="btn-save-qr" onclick="saveQr()">⬇️ Save QR to Gallery (Scan & Pay)</button>
+    </div>
+
     <div class="note">
-      ⚠️ <b>Payment ke baad:</b> Apna 12-digit UTR / Transaction ID note karein aur Google Form par wapas aakar enter karein taaki aapka pass confirm ho sake.
+      💡 <b>Kaise pay karein:</b> UPI ID copy karein → PhonePe/GPay me <b>"To UPI ID"</b> me paste karke pay karein. Payment ke baad 12-digit UTR Google Form me enter karein.
     </div>
 
     <button class="btn-back" onclick="window.history.back()">
@@ -197,29 +242,52 @@
     </button>
   </div>
 
-  <div class="toast" id="toast">UPI ID Copied ✓</div>
+  <div class="toast" id="toast">UPI ID Copied! ✓</div>
 
   <script>
-    const upiUri = "upi://pay?pa=hp9876554@okhdfcbank&pn=Himanshu%20Patel&cu=INR&tn=Adi%20Shakti%20Garba%20Pass";
+    const upiId = "hp9876554@okhdfcbank";
+    const payeeName = "Himanshu Patel";
+    const upiString = "upi://pay?pa=" + upiId + "&pn=" + encodeURIComponent(payeeName) + "&cu=INR";
 
-    // Auto-launch UPI app on mobile after 500ms
+    // Generate QR Code
     window.addEventListener('DOMContentLoaded', () => {
-      // If user is on a mobile device, try to trigger the UPI intent automatically
-      if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-        setTimeout(() => {
-          window.location.href = upiUri;
-        }, 400);
-      }
+      new QRCode(document.getElementById("qrContainer"), {
+        text: upiString,
+        width: 170,
+        height: 170,
+        colorDark: "#1a0d08",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.M
+      });
     });
 
     function copyUpi() {
-      navigator.clipboard.writeText("hp9876554@okhdfcbank").then(() => {
-        const t = document.getElementById("toast");
-        t.classList.add("show");
-        setTimeout(() => t.classList.remove("show"), 2500);
+      navigator.clipboard.writeText(upiId).then(() => {
+        showToast("UPI ID Copied! ✓ Paste in App");
       }).catch(() => {
-        prompt("Copy this UPI ID:", "hp9876554@okhdfcbank");
+        prompt("Copy this UPI ID:", upiId);
       });
+    }
+
+    function copyUpiSilently() {
+      navigator.clipboard.writeText(upiId).catch(() => {});
+    }
+
+    function saveQr() {
+      const canvas = document.querySelector("#qrContainer canvas");
+      if (!canvas) return;
+      const a = document.createElement("a");
+      a.download = "AdiShaktiGarba-QR.png";
+      a.href = canvas.toDataURL("image/png");
+      a.click();
+      showToast("QR Saved to Photos! Scan from Gallery");
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.classList.add("show");
+      setTimeout(() => t.classList.remove("show"), 2800);
     }
   </script>
 </body>
