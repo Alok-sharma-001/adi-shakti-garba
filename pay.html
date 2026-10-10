@@ -19,7 +19,6 @@
       --text: #f6e9d4;
       --muted: #bfa98a;
       --line: rgba(232, 186, 96, 0.25);
-      --green: #2ecc71;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -58,47 +57,31 @@
       font-size: 0.82rem;
       margin-bottom: 18px;
     }
-    .copy-card {
-      background: #0f0805;
-      border: 1.5px dashed var(--gold);
-      border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 20px;
-      cursor: pointer;
-      transition: transform 0.2s, border-color 0.2s;
-    }
-    .copy-card:active { transform: scale(0.98); }
-    .upi-txt {
-      font-family: monospace;
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: var(--gold);
-      word-break: break-all;
-    }
-    .payee-txt {
-      font-size: 0.82rem;
-      color: var(--muted);
-      margin-top: 4px;
-    }
-    .btn-copy {
-      display: inline-flex;
+    .btn-main {
+      display: flex;
       align-items: center;
-      gap: 6px;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 16px;
+      border-radius: 999px;
       background: var(--gold-grad);
       color: #2a1504;
       font-weight: 700;
-      font-size: 0.88rem;
-      padding: 8px 18px;
-      border-radius: 999px;
-      margin-top: 10px;
+      font-size: 1.05rem;
+      text-decoration: none;
+      box-shadow: 0 8px 30px rgba(232, 186, 96, 0.4);
+      margin-bottom: 18px;
       border: 0;
       cursor: pointer;
+      font-family: inherit;
     }
+    .btn-main:active { transform: scale(0.98); }
     .steps-heading {
-      font-size: 0.88rem;
+      font-size: 0.82rem;
       font-weight: 600;
       color: var(--muted);
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
@@ -106,7 +89,7 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
-      margin-bottom: 22px;
+      margin-bottom: 18px;
     }
     .btn-app {
       display: flex;
@@ -121,16 +104,35 @@
       font-size: 0.88rem;
       font-weight: 600;
       text-decoration: none;
-      transition: background 0.2s, border-color 0.2s;
+      cursor: pointer;
+      font-family: inherit;
     }
     .btn-app:active { background: rgba(232, 186, 96, 0.2); border-color: var(--gold); }
+    .copy-card {
+      background: #0f0805;
+      border: 1px dashed var(--gold);
+      border-radius: 16px;
+      padding: 12px;
+      margin-bottom: 16px;
+      cursor: pointer;
+    }
+    .upi-txt {
+      font-family: monospace;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--gold);
+    }
+    .payee-txt {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
     .qr-container {
       background: #fff;
-      padding: 12px;
-      border-radius: 16px;
+      padding: 10px;
+      border-radius: 14px;
       display: inline-block;
-      margin-bottom: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      margin-bottom: 8px;
     }
     .qr-container canvas, .qr-container img {
       display: block;
@@ -140,31 +142,30 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.06);
       border: 1px solid var(--line);
       color: var(--gold);
-      font-size: 0.82rem;
-      padding: 7px 16px;
+      font-size: 0.78rem;
+      padding: 6px 14px;
       border-radius: 999px;
       cursor: pointer;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
       font-family: inherit;
     }
-    .btn-save-qr:hover { background: rgba(232, 186, 96, 0.15); }
     .note {
       background: rgba(232, 186, 96, 0.08);
       border-left: 3px solid var(--gold);
-      padding: 10px 14px;
+      padding: 10px 12px;
       border-radius: 8px;
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       color: var(--muted);
       text-align: left;
-      line-height: 1.5;
-      margin-bottom: 18px;
+      line-height: 1.4;
+      margin-bottom: 16px;
     }
     .btn-back {
       color: var(--gold);
-      font-size: 0.88rem;
+      font-size: 0.85rem;
       text-decoration: none;
       display: inline-flex;
       align-items: center;
@@ -173,7 +174,6 @@
       background: none;
       border: 0;
       font-family: inherit;
-      padding: 6px 12px;
     }
     .toast {
       position: fixed;
@@ -185,7 +185,7 @@
       color: var(--gold);
       padding: 10px 24px;
       border-radius: 999px;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       font-weight: 600;
       box-shadow: 0 10px 30px rgba(0,0,0,0.8);
       transition: transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
@@ -199,42 +199,44 @@
 
   <div class="box">
     <h1>Adi Shakti Garba</h1>
-    <div class="sub">Payee: Himanshu Patel · Official Payment</div>
+    <div class="sub">Payee: Himanshu Patel · Official Payment Gateway</div>
 
-    <!-- 1. Copy Card -->
-    <div class="copy-card" onclick="copyUpi()" title="Tap to Copy">
-      <div class="payee-txt">Pay to UPI ID:</div>
-      <div class="upi-txt">hp9876554@okhdfcbank</div>
-      <div class="payee-txt">Name: Himanshu Patel</div>
-      <button class="btn-copy">📋 Tap to Copy UPI ID</button>
-    </div>
+    <!-- 1. Universal Big Button (Trigger UPI Chooser) -->
+    <a class="btn-main" id="mainPayBtn" href="upi://pay?pa=hp9876554@okhdfcbank&pn=Himanshu%20Patel&cu=INR">
+      ⚡ Pay with UPI App (GPay / PhonePe)
+    </a>
 
-    <!-- 2. Open App Buttons -->
-    <div class="steps-heading">Step 2: Apna Payment App Kholein</div>
+    <!-- 2. Direct App Buttons -->
+    <div class="steps-heading">Ya Apna Payment App Chunein:</div>
     <div class="grid-apps">
-      <a class="btn-app" href="phonepe://" onclick="copyUpiSilently()">
+      <button class="btn-app" onclick="payWith('com.phonepe.app')">
         🟣 PhonePe
-      </a>
-      <a class="btn-app" href="tez://" onclick="copyUpiSilently()">
+      </button>
+      <button class="btn-app" onclick="payWith('com.google.android.apps.nbu.paisa.user')">
         🟢 Google Pay
-      </a>
-      <a class="btn-app" href="paytmmp://" onclick="copyUpiSilently()">
+      </button>
+      <button class="btn-app" onclick="payWith('net.one97.paytm')">
         🔵 Paytm
-      </a>
-      <a class="btn-app" href="bhim://" onclick="copyUpiSilently()">
+      </button>
+      <button class="btn-app" onclick="payWith('in.org.npci.upiapp')">
         🇮🇳 BHIM UPI
-      </a>
+      </button>
     </div>
 
-    <!-- 3. QR Code Backup -->
-    <div class="steps-heading">Ya QR Code se Pay Karein</div>
+    <!-- 3. Copy Card -->
+    <div class="copy-card" onclick="copyUpi()" title="Tap to Copy">
+      <div class="upi-txt">hp9876554@okhdfcbank</div>
+      <div class="payee-txt">Tap to copy UPI ID (Pay to UPI ID in app)</div>
+    </div>
+
+    <!-- 4. QR Code -->
     <div class="qr-container" id="qrContainer"></div>
     <div>
-      <button class="btn-save-qr" onclick="saveQr()">⬇️ Save QR to Gallery (Scan & Pay)</button>
+      <button class="btn-save-qr" onclick="saveQr()">⬇️ Save QR to Gallery</button>
     </div>
 
     <div class="note">
-      💡 <b>Kaise pay karein:</b> UPI ID copy karein → PhonePe/GPay me <b>"To UPI ID"</b> me paste karke pay karein. Payment ke baad 12-digit UTR Google Form me enter karein.
+      ⚠️ <b>Payment ke baad:</b> 12-digit UTR number note karein aur Google Form par enter karke submit karein.
     </div>
 
     <button class="btn-back" onclick="window.history.back()">
@@ -246,26 +248,49 @@
 
   <script>
     const upiId = "hp9876554@okhdfcbank";
-    const payeeName = "Himanshu Patel";
-    const upiString = "upi://pay?pa=" + upiId + "&pn=" + encodeURIComponent(payeeName) + "&cu=INR";
+    const payee = "Himanshu Patel";
+    const rawUpi = "upi://pay?pa=" + upiId + "&pn=" + encodeURIComponent(payee) + "&cu=INR";
 
-    // Generate QR Code
+    // Auto-launch on mobile load (300ms)
     window.addEventListener('DOMContentLoaded', () => {
+      // Generate QR
       new QRCode(document.getElementById("qrContainer"), {
-        text: upiString,
-        width: 170,
-        height: 170,
+        text: rawUpi,
+        width: 150,
+        height: 150,
         colorDark: "#1a0d08",
         colorLight: "#ffffff",
         correctLevel: QRCode.CorrectLevel.M
       });
+
+      // Auto trigger if mobile
+      if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        setTimeout(() => {
+          window.location.href = rawUpi;
+        }, 350);
+      }
     });
+
+    // Launch specific app on Android or fallback to universal UPI
+    function payWith(pkg) {
+      copyUpiSilently();
+      const isAndroid = /Android/i.test(navigator.userAgent);
+      if (isAndroid && pkg) {
+        const intentUrl = "intent://pay?pa=" + upiId + "&pn=" + encodeURIComponent(payee) + "&cu=INR#Intent;scheme=upi;package=" + pkg + ";end";
+        window.location.href = intentUrl;
+        setTimeout(() => {
+          window.location.href = rawUpi;
+        }, 1200);
+      } else {
+        window.location.href = rawUpi;
+      }
+    }
 
     function copyUpi() {
       navigator.clipboard.writeText(upiId).then(() => {
-        showToast("UPI ID Copied! ✓ Paste in App");
+        showToast("UPI ID Copied! ✓");
       }).catch(() => {
-        prompt("Copy this UPI ID:", upiId);
+        prompt("Copy UPI ID:", upiId);
       });
     }
 
@@ -280,14 +305,14 @@
       a.download = "AdiShaktiGarba-QR.png";
       a.href = canvas.toDataURL("image/png");
       a.click();
-      showToast("QR Saved to Photos! Scan from Gallery");
+      showToast("QR Saved to Photos!");
     }
 
     function showToast(msg) {
       const t = document.getElementById("toast");
       t.textContent = msg;
       t.classList.add("show");
-      setTimeout(() => t.classList.remove("show"), 2800);
+      setTimeout(() => t.classList.remove("show"), 2500);
     }
   </script>
 </body>
