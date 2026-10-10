@@ -131,6 +131,7 @@ h1{font-family:Cinzel,serif;font-size:1.4rem;text-align:center}
 <div class="result" id="result" hidden></div>
 
 <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
 <script src="config.js"></script>
 <script>
 const $=s=>document.querySelector(s);
@@ -194,10 +195,27 @@ async function startCamera(){
     await scanner.start({facingMode:"environment"},
       {fps:12,qrbox:(w,h)=>({width:Math.floor(Math.min(w*.92,460)),height:Math.floor(Math.min(h*.55,180))}),aspectRatio:1.333},
       onScan,()=>{});
+    startJsqrAssist();
   }catch(err){
     $("#reader").innerHTML=`<div class="cam-off">📷 Camera not available<br><small>${esc(err.message||err)}</small><br><small>Allow camera access (the site must be on HTTPS), or type codes below.</small></div>`;
     scanner=null;
   }
+}
+// Second, independent QR decoder on the same camera feed. html5-qrcode's built-in decoder (used on iPhones,
+// which lack the native BarcodeDetector) gets stuck on some QR patterns; jsQR reads those reliably.
+let jsqrTimer=null;
+function startJsqrAssist(){
+  if(!window.jsQR||jsqrTimer)return;
+  const cv=document.createElement("canvas"),g=cv.getContext("2d",{willReadFrequently:true});
+  jsqrTimer=setInterval(()=>{
+    if(busy||!$("#result").hidden)return;
+    const v=document.querySelector("#reader video");
+    if(!v||v.readyState<2||!v.videoWidth)return;
+    const w=Math.min(720,v.videoWidth),h=Math.round(v.videoHeight*w/v.videoWidth);
+    cv.width=w;cv.height=h;g.drawImage(v,0,0,w,h);
+    const r=jsQR(g.getImageData(0,0,w,h).data,w,h,{inversionAttempts:"dontInvert"});
+    if(r&&r.data)onScan(r.data);
+  },250);
 }
 function onScan(text){
   let code=text.trim().toUpperCase();
@@ -242,7 +260,8 @@ function show(r){
   if(r.status==="USED")msg=`This ticket was already scanned tonight at ${esc(r.usedAt)}.`;
   if(r.status==="WRONG_NIGHT")msg=`This ticket is valid for ${esc(t.nights)}, not Oct ${session.night}.`;
   if(r.status==="NOT_FOUND"&&!msg)msg="No booking found with this code. Send the guest to the help desk.";
-  if(r.status==="UNVERIFIED")msg=`Payment of <b>₹${esc(t.amount)}</b> is NOT confirmed yet. Ask the organiser to check UTR <b>${esc(t.ref)}</b> in the payment app (GPay). Do not admit if a lower amount was paid.`;
+  const physical=t&&t.method==="Physical pass";
+  if(r.status==="UNVERIFIED")msg=physical?`This printed pass (<b>${esc(t.ref)}</b>) is <b>NOT marked as SOLD</b>. It may be lost or stolen. Ask the organiser to confirm it was sold for <b>₹${esc(t.amount)}</b>.`:`Payment of <b>₹${esc(t.amount)}</b> is NOT confirmed yet. Ask the organiser to check UTR <b>${esc(t.ref)}</b> in the payment app (GPay). Do not admit if a lower amount was paid.`;
   const details=t?`<div class="r-details">
     <div><span>Name</span><b>${esc(t.name)}</b></div>
     <div><span>Pass</span><b>${esc(t.pass)}</b></div>
@@ -251,14 +270,14 @@ function show(r){
     <div><span>Code</span><b>${esc(t.code)}</b></div></div>`:`<div class="r-details"><div><span>Code</span><b>${esc(r.code)}</b></div></div>`;
   const admit=t&&(r.status==="OK"||r.status==="UNVERIFIED")?`<div class="r-admit">ADMIT ${t.admits}</div>`:"";
   const actions=r.status==="UNVERIFIED"
-    ?`<button class="btn primary" id="rNext">Deny · Scan next</button><button class="btn" id="rForce">Organiser confirmed ₹${esc(t.amount)} received → Admit</button>`
+    ?`<button class="btn primary" id="rNext">Deny · Scan next</button><button class="btn" id="rForce">${physical?"Organiser confirmed this pass was sold → Admit":`Organiser confirmed ₹${esc(t.amount)} received → Admit`}</button>`
     :r.status==="ERROR"?`<button class="btn primary" id="rRetry">Try again</button><button class="btn" id="rNext">Scan next</button>`
     :`<button class="btn ${r.status==="OK"?"":"primary"}" id="rNext">Scan next</button>`;
   const el=$("#result");el.className="result "+(VIEW[r.status]?r.status:"ERROR");el.hidden=false;
   el.innerHTML=`<div class="r-icon">${v.icon}</div><div class="r-title">${v.title}</div>${admit}<p class="r-msg">${msg}</p>${details}
     <div class="r-actions">${actions}</div>${r.status==="OK"?'<div class="r-bar"><i></i></div>':""}`;
   $("#rNext").onclick=next;
-  if($("#rForce"))$("#rForce").onclick=()=>{if(!confirm(`Only admit if the organiser has seen the FULL ₹${t.amount} received in the payment app (GPay) for UTR ${t.ref}.\n\nAdmit this guest?`))return;el.hidden=true;check(r.code,true)};
+  if($("#rForce"))$("#rForce").onclick=()=>{if(!confirm(physical?`Only admit if the organiser confirms printed pass ${t.ref} was SOLD (₹${t.amount}).\n\nAdmit this guest?`:`Only admit if the organiser has seen the FULL ₹${t.amount} received in the payment app (GPay) for UTR ${t.ref}.\n\nAdmit this guest?`))return;el.hidden=true;check(r.code,true)};
   if($("#rRetry"))$("#rRetry").onclick=()=>{el.hidden=true;check(r.code,!!r.force)};
   clearTimeout(show._t);
   if(r.status==="OK")show._t=setTimeout(next,2500);
