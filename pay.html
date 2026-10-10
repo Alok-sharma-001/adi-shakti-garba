@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pay via UPI — Adi Shakti Garba 2026</title>
+  <meta name="theme-color" content="#0b0604">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0604;
+      --card: #180d08;
+      --gold: #e8ba60;
+      --gold-grad: linear-gradient(180deg, #fff3c9 0%, #f2c96b 45%, #b9853a 100%);
+      --maroon: #7a0f14;
+      --text: #f6e9d4;
+      --muted: #bfa98a;
+      --line: rgba(232, 186, 96, 0.25);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(122, 15, 20, 0.5), transparent 70%), var(--bg);
+      color: var(--text);
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      text-align: center;
+    }
+    .box {
+      background: var(--card);
+      border: 1.5px solid var(--gold);
+      border-radius: 24px;
+      padding: 32px 24px;
+      max-width: 440px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.7), 0 0 40px rgba(232, 186, 96, 0.15);
+      position: relative;
+    }
+    h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.7rem;
+      background: var(--gold-grad);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 6px;
+    }
+    .sub {
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin-bottom: 22px;
+    }
+    .upi-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #0f0805;
+      border: 1px dashed var(--gold);
+      border-radius: 12px;
+      padding: 10px 16px;
+      font-family: monospace;
+      font-size: 1rem;
+      color: var(--gold);
+      cursor: pointer;
+      margin-bottom: 20px;
+      transition: transform 0.2s;
+    }
+    .upi-badge:hover { transform: scale(1.02); }
+    .upi-badge small { color: var(--muted); font-size: 0.75rem; }
+    .btn-main {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 16px;
+      border-radius: 999px;
+      background: var(--gold-grad);
+      color: #2a1504;
+      font-weight: 700;
+      font-size: 1.05rem;
+      text-decoration: none;
+      box-shadow: 0 8px 30px rgba(232, 186, 96, 0.4);
+      margin-bottom: 18px;
+      transition: transform 0.2s;
+    }
+    .btn-main:hover { transform: translateY(-2px); }
+    .grid-apps {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+    .btn-app {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--line);
+      color: var(--text);
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .btn-app:hover { background: rgba(232, 186, 96, 0.15); border-color: var(--gold); }
+    .note {
+      background: rgba(232, 186, 96, 0.07);
+      border-left: 3px solid var(--gold);
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-align: left;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+    .btn-back {
+      color: var(--gold);
+      font-size: 0.88rem;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      background: none;
+      border: 0;
+      font-family: inherit;
+    }
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #2a1504;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      padding: 10px 20px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+      transition: transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+      pointer-events: none;
+      z-index: 99;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+  </style>
+</head>
+<body>
+
+  <div class="box">
+    <h1>Adi Shakti Garba</h1>
+    <div class="sub">Payee: Himanshu Patel · Official Pass Booking</div>
+
+    <!-- Click to Copy UPI ID -->
+    <div class="upi-badge" id="copyBadge" onclick="copyUpi()" title="Tap to Copy">
+      <span>hp9876554@okhdfcbank</span>
+      <small>(Tap to Copy)</small>
+    </div>
+
+    <!-- 1-Click All UPI Apps Button -->
+    <a class="btn-main" id="autoPayBtn" href="upi://pay?pa=hp9876554@okhdfcbank&pn=Himanshu%20Patel&cu=INR&tn=Adi%20Shakti%20Garba%20Pass">
+      ⚡ Pay with Any UPI App
+    </a>
+
+    <!-- Direct App Buttons -->
+    <div class="grid-apps">
+      <a class="btn-app" href="upi://pay?pa=hp9876554@okhdfcbank&pn=Himanshu%20Patel&cu=INR&tn=Adi%20Shakti%20Garba">
+        🟢 Google Pay
+      </a>
+      <a class="btn-app" href="phonepe://pay?pa=hp9876554@okhdfcbank&pn=Himanshu%20Patel&cu=INR&tn=Adi%20Shakti%20Garba">
+        🟣 PhonePe
+      </a>
+      <a class="btn-app" href="paytmmp://pay?pa=hp9876554@okhdfcbank&pn=Himanshu%20Patel&cu=INR&tn=Adi%20Shakti%20Garba">
+        🔵 Paytm
+      </a>
+      <a class="btn-app" href="upi://pay?pa=hp9876554@okhdfcbank&pn=Himanshu%20Patel&cu=INR&tn=Adi%20Shakti%20Garba">
+        🇮🇳 BHIM UPI
+      </a>
+    </div>
+
+    <div class="note">
+      ⚠️ <b>Payment ke baad:</b> Apna 12-digit UTR / Transaction ID note karein aur Google Form par wapas aakar enter karein taaki aapka pass confirm ho sake.
+    </div>
+
+    <button class="btn-back" onclick="window.history.back()">
+      ← Return to Google Form
+    </button>
+  </div>
+
+  <div class="toast" id="toast">UPI ID Copied ✓</div>
+
+  <script>
+    const upiUri = "upi://pay?pa=hp9876554@okhdfcbank&pn=Himanshu%20Patel&cu=INR&tn=Adi%20Shakti%20Garba%20Pass";
+
+    // Auto-launch UPI app on mobile after 500ms
+    window.addEventListener('DOMContentLoaded', () => {
+      // If user is on a mobile device, try to trigger the UPI intent automatically
+      if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        setTimeout(() => {
+          window.location.href = upiUri;
+        }, 400);
+      }
+    });
+
+    function copyUpi() {
+      navigator.clipboard.writeText("hp9876554@okhdfcbank").then(() => {
+        const t = document.getElementById("toast");
+        t.classList.add("show");
+        setTimeout(() => t.classList.remove("show"), 2500);
+      }).catch(() => {
+        prompt("Copy this UPI ID:", "hp9876554@okhdfcbank");
+      });
+    }
+  </script>
+</body>
+</html>
